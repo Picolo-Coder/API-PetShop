@@ -1,10 +1,8 @@
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, Field
 from typing import Optional
 from datetime import datetime
 
-from pydantic.v1 import Field
-
-
+# Modelo para criação de usuários
 class UsuarioCreate(BaseModel):
     nome: str
     email: EmailStr
@@ -13,6 +11,7 @@ class UsuarioCreate(BaseModel):
     senha: str
     tipo_usuario: str
 
+# Modelo para leitura de usuários (retorno)
 class UsuarioRead(BaseModel):
     id: int
     nome: str
@@ -25,6 +24,7 @@ class UsuarioRead(BaseModel):
     class Config:
         orm_mode = True
 
+# Modelo para atualização de usuários
 class UsuarioUpdate(BaseModel):
     nome: Optional[str] = None
     email: Optional[EmailStr] = None
@@ -32,3 +32,8 @@ class UsuarioUpdate(BaseModel):
     senha: Optional[str] = None
     tipo_usuario: Optional[str] = None
     cpf: Optional[str] = Field(None, example="123.456.789-00")
+
+# Modelo para os dados de login
+class LoginData(BaseModel):
+    email: EmailStr
+    senha: str
