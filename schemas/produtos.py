@@ -25,4 +25,3 @@ class ProdutoUpdate(BaseModel):
     descricao: Optional[str] = None
     volume: Optional[str] = None
     tipo_id: Optional[int] = None
-    # Removido o campo imagem

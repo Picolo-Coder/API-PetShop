@@ -80,3 +80,31 @@ def get_carrinho_by_id(carrinho_id: int):
         raise HTTPException(status_code=404, detail="Carrinho não encontrado")
 
     return carrinho
+
+
+@router.get('/usuario/{usuario_id}', response_model=list[CarrinhoRead])
+def get_carrinhos_by_usuario(usuario_id: int):
+    # Verifica se o usuário existe
+    usuario = Usuario.get_or_none(Usuario.id == usuario_id)
+    if not usuario:
+        raise HTTPException(status_code=404, detail="Usuário não encontrado")
+
+    # Retorna todos os carrinhos do usuário
+    carrinhos = Carrinho.select().where(Carrinho.usuario == usuario)
+    carrinhos_lista = []
+
+    for carrinho in carrinhos:
+        produto = Produto.get_or_none(Produto.id == carrinho.produto_id)
+        imagem_url = f"http://127.0.0.1:8000/produtos/{produto.id}/imagem" if produto else None
+        carrinho_data = {
+            "id": carrinho.id,
+            "usuario_id": carrinho.usuario_id,
+            "produto_id": carrinho.produto_id,
+            "quantidade": carrinho.quantidade,
+            "imagem": imagem_url  # URL da imagem do produto
+        }
+        carrinhos_lista.append(carrinho_data)
+
+    return carrinhos_lista
+
+
